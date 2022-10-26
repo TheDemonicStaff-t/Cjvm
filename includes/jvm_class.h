@@ -3,7 +3,7 @@
 #include "jvm_structs/constants.h"
 #include "jvm_structs/miscellaneous.h"
 
-typedef struct _jvm_class {
+typedef struct _jvm_class_file {
     u8 valid;
     char* version;
     u16 constpool_c;
@@ -14,6 +14,11 @@ typedef struct _jvm_class {
     u16 interface_c;
     u16* interfaces;
     u16 field_c;
-} jvm_class;
+    field* fields;
+    u16 method_c;
+    method* methods;
+    u16 attribute_c;
+    jvm_attribute* attributes;
+} jvm_class_file;
 
-jvm_class gen_class();
+jvm_class_file gen_class();
