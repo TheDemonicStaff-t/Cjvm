@@ -69,12 +69,12 @@ int pprint_cpool(u8* data, int idx)
     return idx;
 }
 
-int parse_cpool(u8* data, int idx, jvm_constant* const){
+int parse_cpool(u8* data, int idx, jvm_constant* const, u16* csize){
 
-    u16 csize = jvm_u16(data[idx++], data[idx++])-1;
+    csize* = jvm_u16(data[idx++], data[idx++])-1;
     int ssize = 0;
 
-    for (int i = 0; i <csize; i++){
+    for (int i = 0; i < csize*; i++){
         u16 tag = jvm_u16(data[idx++], data[idx++]);
 
         switch (tag) {

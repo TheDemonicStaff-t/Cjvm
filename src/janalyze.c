@@ -38,7 +38,7 @@ int main(int argc, char** argv){
 
     printf("VERSION: %s\n", file.version);
  
-    idx = pprint_cpool(data, idx);
+    idx = pprint_cpool(data, idx, &file.constant_c);
 
     free(data);
 
