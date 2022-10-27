@@ -1,6 +1,7 @@
 #include "../includes/jvm_structs/constants.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 
 int pprint_cpool(u8* data, int idx)
 {
@@ -29,6 +30,7 @@ int pprint_cpool(u8* data, int idx)
                 } tmp[ssize+1] = '\0';
 
                 printf("%d:utf8{%d, %s}\n", cpidx++, ssize, tmp);
+                free(tmp);
                 break;
             case CONSTANT_Fieldref:
                 printf("%d:fieldref{%d, %d}\n",cpidx++,jvm_u16(data[idx++], data[idx++])-1,jvm_u16(data[idx++], data[idx++])-1);
@@ -89,15 +91,15 @@ int parse_cpool(u8* data, int idx, jvm_constant* consts, u16 csize, u8 debug){
                 break;
             case CONSTANT_Class:
                 consts[i].jconst._class = (constant_class*) malloc(sizeof(constant_class));
-                consts[i].jconst._class->name_index = jvm_u16(data[idx++], data[idx++]);
+                consts[i].jconst._class->name_index = jvm_u16(data[idx++], data[idx++])-1;
 
                 if (debug == 1)
                     printf("%d:class{ni:%d}\n", i, consts[i].jconst._class->name_index);
                 break;
             case CONSTANT_NameAndType:
                     consts[i].jconst._nameandtype = (constant_nameandtype*) malloc(sizeof(constant_nameandtype));
-                    consts[i].jconst._nameandtype->name_index = jvm_u16(data[idx++], data[idx++]);
-                    consts[i].jconst._nameandtype->descriptor_index = jvm_u16(data[idx++], data[idx++]);
+                    consts[i].jconst._nameandtype->name_index = jvm_u16(data[idx++], data[idx++])-1;
+                    consts[i].jconst._nameandtype->descriptor_index = jvm_u16(data[idx++], data[idx++])-1;
 
                     if (debug == 1)
                         printf("%d:nameandtype{ni:%d, di:%d}\n", i, consts[i].jconst._nameandtype->name_index, consts[i].jconst._nameandtype->descriptor_index);
@@ -105,25 +107,25 @@ int parse_cpool(u8* data, int idx, jvm_constant* consts, u16 csize, u8 debug){
             case CONSTANT_Utf8:
                 consts[i].jconst._utf8 = (constant_utf8*) malloc(sizeof(constant_utf8));
                 consts[i].jconst._utf8->length = jvm_u16(data[idx++], data[idx++]);
-                consts[i].jconst._utf8->bytes = (char*) malloc(sizeof(char)*(consts[i].jconst._utf8->length+1));
+                consts[i].jconst._utf8->bytes = (char*) malloc(sizeof(char)*(consts[i].jconst._utf8->length));
                 for(int x = 0; x < consts[i].jconst._utf8->length; x++){
                     consts[i].jconst._utf8->bytes[x] = data[idx++];
-                } consts[i].jconst._utf8->bytes[consts[i].jconst._utf8->length] = '/0';
+                } 
 
                 if (debug == 1)
                     printf("%d:utf8{l:%d, s:'%s'}\n",i ,consts[i].jconst._utf8->length, consts[i].jconst._utf8->bytes);
                 break;
             case CONSTANT_Fieldref:
                 consts[i].jconst._fieldref = (constant_fieldref*) malloc(sizeof(constant_fieldref));
-                consts[i].jconst._fieldref->class_index = jvm_u16(data[idx++], data[idx++]);
-                consts[i].jconst._fieldref->name_and_type_index = jvm_u16(data[idx++], data[idx++]);
+                consts[i].jconst._fieldref->class_index = jvm_u16(data[idx++], data[idx++])-1;
+                consts[i].jconst._fieldref->name_and_type_index = jvm_u16(data[idx++], data[idx++])-1;
 
                 if (debug == 1)
                     printf("%d:fieldref:{ci:%d, n+ti:%d}\n", i, consts[i].jconst._fieldref->class_index, consts[i].jconst._fieldref->name_and_type_index);
                 break;
             case CONSTANT_String:
                 consts[i].jconst._string = (constant_string*) malloc(sizeof(constant_string));
-                consts[i].jconst._string->string_index = jvm_u16(data[idx++], data[idx++]);
+                consts[i].jconst._string->string_index = jvm_u16(data[idx++], data[idx++])-1;
 
                 if (debug == 1)
                     printf("%d:string{si:%d}\n", i, consts[i].jconst._string->string_index);
@@ -189,5 +191,3 @@ void free_cpool(jvm_constant* consts, u16 csize){
     }
     free(consts);
 }
-
-void p_cpool(jvm_constant* consts, u16 csize);
