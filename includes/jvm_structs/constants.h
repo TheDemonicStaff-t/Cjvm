@@ -52,6 +52,6 @@ typedef union _constant {
 } constant;
 
 typedef struct _jvm_constant{
-    constant constant;
+    constant jconst;
     u8 tag;
 } jvm_constant;
