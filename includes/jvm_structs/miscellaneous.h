@@ -3,6 +3,9 @@
 #include "../nums.h"
 #include "attributes.h"
 
+typedef struct _jvm_attribute jvm_attribute;
+typedef struct _annotation annotation;
+
 typedef struct _exception {u16 start_pc; u16 end_pc; u16 handler_pc; u16 catch_type;} exception;
 
 typedef struct _jvm_class {u16 inner_class_info_index; u16 outer_class_info_index; u16 inner_name_index; u16 inner_name_access_flags;} jvm_class;
@@ -13,18 +16,14 @@ typedef struct _local_variable_table {u16 start_pc; u16 length; u16 name_index; 
 
 typedef struct _local_variable_type_table {u16 start_pc; u16 length; u16 name_index; u16 signature_index; u16 index;} local_variable_type_table;
 
-typedef struct _enum_const_value_info {u16 type_name_index; u16 const_name_index;} enum_const_value_info;
-
-typedef struct _array_value_info {u16 num_values; element_value* values;} array_value_info;
-
 typedef struct _element_value {
     u8 tag;
     union {
         u16 const_value_index;
-        enum_const_value_info enum_value;
+        struct enum_const_value_info {u16 num_values; element_value* values;} enum_value;
         u16 class_info_index;
         annotation anotation_value;
-        array_value_info array_value;
+        struct array_value_info {u16 num_values; element_value* values;} array_value;
     } value;
 } element_value;
 

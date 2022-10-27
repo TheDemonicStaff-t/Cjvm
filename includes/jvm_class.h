@@ -1,5 +1,7 @@
 #pragma once
 #include "nums.h"
+
+#include "jvm_structs/attributes.h"
 #include "jvm_structs/constants.h"
 #include "jvm_structs/miscellaneous.h"
 

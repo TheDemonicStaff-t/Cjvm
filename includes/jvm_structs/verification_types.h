@@ -3,15 +3,15 @@
 #include "../nums.h"
 
 typedef enum _verification_type {
-    TopVariableInfo = 0,
-    IntergerVariableInfo = 1,
-    FloatVariableInfo = 2,
-    LongVariableInfo = 4,
-    DoubleVariableInfo = 3,
-    NullVariableInfo = 5,
-    UninitializedThisVariableInfo = 6,
-    ObjectVariableInfo = 7,
-    UninitializedVariableInfo = 8
+    TopVariableVerification = 0,
+    IntergerVariableVerification = 1,
+    FloatVariableVerification = 2,
+    LongVariableVerification = 4,
+    DoubleVariableVerification = 3,
+    NullVariableVerification = 5,
+    UninitializedThisVariableVerification = 6,
+    ObjectVariableVerification = 7,
+    UninitializedVariableVerification = 8
 } verification_type;
 
 typedef struct _TopVariableInfo {u8 tag;} TopVariableInfo;
