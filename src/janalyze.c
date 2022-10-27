@@ -37,8 +37,11 @@ int main(int argc, char** argv){
     sprintf(file.version, "%f", tmp);
 
     printf("VERSION: %s\n", file.version);
+    file.constpool_c = (jvm_u16(data[idx++], data[idx++])-1);
+    file.constpool = (jvm_constant*) malloc(sizeof(jvm_constant)*file.constpool_c);
  
-    idx = pprint_cpool(data, idx, &file.constant_c);
+    idx = parse_cpool(data, idx, file.constpool, file.constpool_c, 1);
+    free_cpool(file.constpool, file.constpool_c);
 
     free(data);
 

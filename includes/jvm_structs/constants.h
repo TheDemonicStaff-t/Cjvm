@@ -2,7 +2,7 @@
 
 #include "../nums.h"
 
-typedef enum _const_tag{
+typedef enum _const_tag{ // 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 18
     CONSTANT_Class = 7, //
     CONSTANT_Fieldref = 9,  //
     CONSTANT_Methodref = 10,    //
@@ -13,10 +13,10 @@ typedef enum _const_tag{
     CONSTANT_Long = 5,  //
     CONSTANT_Double = 6,    //
     CONSTANT_NameAndType = 12,  //
-    CONSTANT_Utf8 = 1,  //
-    CONSTANT_MethodHandle = 15,
-    CONSTANT_MethodType = 16,
-    CONSTANT_InvokeDynamic = 18,
+    CONSTANT_Utf8 = 1,  // 
+    CONSTANT_MethodHandle = 15, // 
+    CONSTANT_MethodType = 16, // 
+    CONSTANT_InvokeDynamic = 18, // 
 } const_tag;
 
 typedef struct _constant_class {u16 name_index;} constant_class;
@@ -57,4 +57,6 @@ typedef struct _jvm_constant{
 } jvm_constant;
 
 int pprint_cpool(u8* data, int idx);
-int parse_cpool(u8* data, int idx, jvm_constant* const);
+int parse_cpool(u8* data, int idx, jvm_constant* consts, u16 csize, u8 debug);
+void free_cpool(jvm_constant* consts, u16 csize);
+void p_cpool(jvm_constant* consts, u16 csize);
