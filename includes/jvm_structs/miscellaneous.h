@@ -5,6 +5,7 @@
 
 typedef struct _jvm_attribute jvm_attribute;
 typedef struct _annotation annotation;
+typedef struct _element_value element_value;
 
 typedef struct _exception {u16 start_pc; u16 end_pc; u16 handler_pc; u16 catch_type;} exception;
 
@@ -16,20 +17,23 @@ typedef struct _local_variable_table {u16 start_pc; u16 length; u16 name_index; 
 
 typedef struct _local_variable_type_table {u16 start_pc; u16 length; u16 name_index; u16 signature_index; u16 index;} local_variable_type_table;
 
-typedef struct _element_value {
+typedef struct array_value_info {u16 num_values; element_value* values;} array_value_info;
+typedef struct enum_const_value_info {u16 num_values; element_value* values;} enum_value_info;
+
+struct _element_value {
     u8 tag;
     union {
         u16 const_value_index;
-        struct enum_const_value_info {u16 num_values; element_value* values;} enum_value;
+        enum_value_info enum_value;
         u16 class_info_index;
         annotation anotation_value;
-        struct array_value_info {u16 num_values; element_value* values;} array_value;
+        array_value_info array_value;
     } value;
-} element_value;
+};
 
 typedef struct _element_value_pair {u16 element_name_index; element_value value;} element_value_pair;
 
-typedef struct _annotation {u16 type_index; u16 num_element_value_pairs; element_value_pair* element_value_pairs;} annotation;
+struct _annotation {u16 type_index; u16 num_element_value_pairs; element_value_pair* element_value_pairs;};
 
 typedef struct _parameter_annotation {u16 num_annotations; annotation* annotations;} parameter_annotation;
 
