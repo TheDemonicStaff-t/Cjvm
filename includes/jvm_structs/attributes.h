@@ -5,26 +5,26 @@
 #include "stack_map_frames.h"
 
 typedef enum _attr_type {
-    ConstantValue,
-    Code,
-    StackMapTable,
-    Exceptions,
-    InnerClasses,
-    EnclosingMethod,
-    Synthetic,
-    Signature,
-    Sourcefile,
-    SourceDebugExtension,
-    LineNumberTable,
-    LocalVariableTable,
-    LocalVariableTypeTable,
-    Deprecated,
-    RuntimeVisibleAnnotations,
-    RuntimeInvisibleAnnotations,
-    RuntimeVisibleParameterAnnotations,
-    RuntimeInvisibleParameterAnnotations,
-    AnnotationDefault,
-    BootstrapMethods
+    attrConstantValue,
+    attrCode,
+    attrStackMapTable,
+    attrExceptions,
+    attrInnerClasses,
+    attrEnclosingMethod,
+    attrSynthetic,
+    attrSignature,
+    attrSourcefile,
+    attrSourceDebugExtension,
+    attrLineNumberTable,
+    attrLocalVariableTable,
+    attrLocalVariableTypeTable,
+    attrDeprecated,
+    attrRuntimeVisibleAnnotations,
+    attrRuntimeInvisibleAnnotations,
+    attrRuntimeVisibleParameterAnnotations,
+    attrRuntimeInvisibleParameterAnnotations,
+    attrAnnotationDefault,
+    attrBootstrapMethods
 } attr_type;
 
 typedef struct _ConstantValue {u16 constantvalue_index;} ConstantValue;

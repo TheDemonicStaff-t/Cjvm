@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../includes/jvm_class.h"
 
@@ -30,8 +31,9 @@ int main(int argc, char** argv){
 
     file.valid = 1;
     f32 tmp = ((f32)jvm_u16(data[idx++], data[idx++])/100)+((f32)jvm_u16(data[idx++], data[idx++]));
-    file.version = ftoa(tmp);
-    printf(file.version);
+    file.version = (char*) malloc(sizeof(char)*9);
+    sprintf(file.version, "%f", tmp);
+    printf("%s\n", file.version);
 
     free(data);
 
