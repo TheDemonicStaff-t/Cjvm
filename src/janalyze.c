@@ -38,12 +38,43 @@ int main(int argc, char** argv){
 
     printf("VERSION: %s\n", file.version);
     file.constpool_c = (jvm_u16(data[idx++], data[idx++])-1);
+    printf("constants[%d]=\n", file.constpool_c);
     file.constpool = (jvm_constant*) malloc(sizeof(jvm_constant)*file.constpool_c);
  
     idx = parse_cpool(data, idx, file.constpool, file.constpool_c, 1);
-    free_cpool(file.constpool, file.constpool_c);
+
+    file.access_flags = jvm_u16(data[idx++], data[idx++]);
+    printf("access_flags: %d\n", file.access_flags);
+
+    file.this_class = jvm_u16(data[idx++], data[idx++])-1;
+    printf("this_class: %s\n", file.constpool[file.constpool[file.this_class].jconst._class->name_index].jconst._utf8->bytes);
+
+    file.super_class = jvm_u16(data[idx++], data[idx++])-1;
+    if (file.super_class != 0)
+        printf("super_clas: %s\n", file.constpool[file.constpool[file.super_class].jconst._class->name_index].jconst._utf8->bytes);
+    file.interface_c = jvm_u16(data[idx++], data[idx++]);
+    printf("interfaces[%d]=\n", file.interface_c);
+
+    u16 interfaces[file.interface_c];
+
+    for (int i = 0; i < file.interface_c; i++){
+        interfaces[i] = jvm_u16(data[idx++], data[idx++]);
+        printf("interface[%d]\n", interfaces[i]);
+    }
+    file.interfaces = interfaces;
+
+    file.field_c = jvm_u16(data[idx++], data[idx++]);
+    printf("fields[%d]=\n", file.field_c);
+
+    field fields[file.field_c];
+
+    for (int i = 0; i < file.field_c; i++){
+        fields[i].access_flags = jvm_u16(data[idx++], data[idx++]);
+        fields[i].name_index = jvm_u16(data[idx++], data[idx++]);
+    }
 
     free(data);
+    free_cpool(file.constpool, file.constpool_c);
 
     return 0;
 }

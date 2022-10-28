@@ -73,7 +73,6 @@ int pprint_cpool(u8* data, int idx)
 
 int parse_cpool(u8* data, int idx, jvm_constant* consts, u16 csize, u8 debug){
 
-    *consts;
     int ssize = 0;
 
     for (int i = 0; i < csize; i++){
@@ -129,6 +128,65 @@ int parse_cpool(u8* data, int idx, jvm_constant* consts, u16 csize, u8 debug){
 
                 if (debug == 1)
                     printf("%d:string{si:%d}\n", i, consts[i].jconst._string->string_index);
+                break;
+            case CONSTANT_Long:
+                consts[i].jconst._long = (constant_long *) malloc(sizeof(constant_long));
+                consts[i].jconst._long->num = jvm_i64(data[idx++],data[idx++],data[idx++],data[idx++],data[idx++],data[idx++],data[idx++],data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:long{n:%lli}\n", i, consts[i].jconst._long->num);
+                break;
+            case CONSTANT_Float:
+                consts[i].jconst._float = (constant_float *) malloc(sizeof(constant_float));
+                consts[i].jconst._float->num = jvm_f32(data[idx++],data[idx++],data[idx++],data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:float{n:%f}\n", i, consts[i].jconst._float->num);
+                break;
+            case CONSTANT_Double:
+                consts[i].jconst._double = (constant_double *) malloc(sizeof(constant_double));
+                consts[i].jconst._double->num = jvm_f64(data[idx++],data[idx++],data[idx++],data[idx++],data[idx++],data[idx++],data[idx++],data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:double{n:%lf}\n",i, consts[i].jconst._double->num);
+                break;
+            case CONSTANT_Integer:
+                consts[i].jconst._int = (constant_int*) malloc(sizeof(constant_int));
+                consts[i].jconst._int->num = jvm_i32(data[idx++],data[idx++],data[idx++],data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:int{n:%d}\n", i, consts[i].jconst._int->num);
+                break;
+            case CONSTANT_MethodType:
+                consts[i].jconst._methodtype = (constant_methodtype*) malloc(sizeof(constant_methodtype));
+                consts[i].jconst._methodtype->descriptor_index = jvm_u16(data[idx++], data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:methodtype{di:%d}\n", i, consts[i].jconst._methodtype->descriptor_index);
+                break;
+            case CONSTANT_MethodHandle:
+                consts[i].jconst._methodhandle = (constant_methodhandle*) malloc(sizeof(constant_methodhandle));
+                consts[i].jconst._methodhandle->reference_kind = data[idx++];
+                consts[i].jconst._methodhandle->reference_index = jvm_u16(data[idx++], data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:methodhandle{rk:%d,ri:%d}\n", i, consts[i].jconst._methodhandle->reference_kind, consts[i].jconst._methodhandle->reference_index);
+                break;
+            case CONSTANT_InvokeDynamic:
+                consts[i].jconst._invokedynamic = (constant_invokedynamic*) malloc(sizeof(constant_invokedynamic));
+                consts[i].jconst._invokedynamic->bootstrap_method_attr_index = jvm_u16(data[idx++], data[idx++]);
+                consts[i].jconst._invokedynamic->name_and_type_index = jvm_u16(data[idx++], data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:invokedynamic{bmai:%d, n+ti:%d}\n", i, consts[i].jconst._invokedynamic->bootstrap_method_attr_index, consts[i].jconst._invokedynamic->name_and_type_index);
+                break;
+            case CONSTANT_InterfaceMethodref:
+                consts[i].jconst._interfacemethodref = (constant_interfacemethodref*) malloc(sizeof(constant_interfacemethodref));
+                consts[i].jconst._interfacemethodref->class_index = jvm_u16(data[idx++], data[idx++]);
+                consts[i].jconst._interfacemethodref->name_and_type_index = jvm_u16(data[idx++], data[idx++]);
+
+                if (debug == 1)
+                    printf("%d:interfacemethodref{ci:%d, n+ti:%d}\n", i, consts[i].jconst._interfacemethodref->class_index, consts[i].jconst._interfacemethodref->name_and_type_index);
                 break;
             default: // consts[i].jconst._ = (constant_*) malloc(sizeof(constant_));
                 printf("unimplemented constant: %d\n", tag);

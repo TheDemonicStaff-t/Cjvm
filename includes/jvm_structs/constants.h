@@ -3,20 +3,20 @@
 #include "../nums.h"
 
 typedef enum _const_tag{ // 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 18
-    CONSTANT_Utf8 = 1,  // 
-    CONSTANT_Long = 5,  //
-    CONSTANT_Float = 4, 
-    CONSTANT_Class = 7, //
-    CONSTANT_String = 8,    //
-    CONSTANT_Double = 6,    //
-    CONSTANT_Integer = 3,   //
-    CONSTANT_Fieldref = 9,  //
-    CONSTANT_Methodref = 10,    //
-    CONSTANT_MethodType = 16, // 
-    CONSTANT_NameAndType = 12,  //
-    CONSTANT_MethodHandle = 15, // 
-    CONSTANT_InvokeDynamic = 18, // 
-    CONSTANT_InterfaceMethodref = 11,   //
+    CONSTANT_Utf8 = 1,                  //
+    CONSTANT_Long = 5,                  //
+    CONSTANT_Float = 4,                 //
+    CONSTANT_Class = 7,                 //
+    CONSTANT_String = 8,                //
+    CONSTANT_Double = 6,                //
+    CONSTANT_Integer = 3,               //
+    CONSTANT_Fieldref = 9,              //
+    CONSTANT_Methodref = 10,            //
+    CONSTANT_MethodType = 16,           //
+    CONSTANT_NameAndType = 12,          //
+    CONSTANT_MethodHandle = 15,         //
+    CONSTANT_InvokeDynamic = 18,        //
+    CONSTANT_InterfaceMethodref = 11,
 } const_tag;
 
 typedef struct _constant_class {u16 name_index;} constant_class;
