@@ -29,14 +29,17 @@ void parse_attr(u8* data, i32* idx, jvm_attribute* attrs, i32 attr_c, jvm_consta
             attrs[i].attr.code_attr->attribute_c = jvm_u16(data[*idx++], data[*idx++]);
             attrs[i].attr.code_attr->attributes = (jvm_attribute*) malloc(sizeof(jvm_attribute));
             parse_attr(data, idx, attrs[i].attr.code_attr->attributes, attrs[i].attr.code_attr->attribute_c, consts);
+        } else if (strcmp("StackMapTable", consts[attrs[i].attribute_name_index].jconst._utf8->bytes) == 0){
+            attrs[i].attr.stack_map_table_attr = (StackMapTable*) malloc(sizeof(StackMapTable));
+            attrs[i].attr.stack_map_table_attr->number_of_entries = jvm_u16(data[*idx++], data[*idx++]);
+            attrs[i].attr.stack_map_table_attr->entries = (jvm_stack_map_frame*) malloc(sizeof(jvm_stack_map_frame)*attrs[i].attr.stack_map_table_attr->number_of_entries);
         }
     }
 }
 
 void free_attr(jvm_attribute* attrs, i32 attr_c, jvm_constant* consts){
     for (int i = 0; i < attr_c; i++){
-        if (strcmp("ConstantValue", consts[attrs[i].attribute_name_index].jconst._utf8->bytes) == 0){
-        } else if (strcmp("Code", consts[attrs[i].attribute_name_index].jconst._utf8->bytes) == 0){
+        if (strcmp("Code", consts[attrs[i].attribute_name_index].jconst._utf8->bytes) == 0){
             free(attrs[i].attr.code_attr->code);
             free(attrs[i].attr.code_attr->exceptions);
             free_attr(attrs[i].attr.code_attr->attributes, attrs[i].attr.code_attr->attribute_c, consts);

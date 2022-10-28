@@ -5,10 +5,15 @@
 #include "../includes/jvm_class.h"
 
 int main(int argc, char** argv){
+
+    // ARG CHECKS
+
     if (argc != 2){
         printf("no file provided\n");
         return 1;
     }
+
+    // FILE OPEND
 
     FILE* f = fopen(argv[1], "rb");
 
@@ -21,9 +26,11 @@ int main(int argc, char** argv){
 
     fclose(f);
 
+    // FILE CHECKS
     i32 idx = 0;
     if (!((data[idx++] == 0xCA)&(data[idx++] == 0xFE)&(data[idx++] == 0xBA)&(data[idx++] == 0xBE))){
         printf("non-.class file provided\n");
+        free(data);
         return 2;
     }
 
@@ -38,13 +45,18 @@ int main(int argc, char** argv){
 
     printf("VERSION: %s\n", file.version);
     file.constpool_c = (jvm_u16(data[idx++], data[idx++])-1);
+
+    // CONSTANT POOL PARSE
     printf("constants[%d]=\n", file.constpool_c);
     file.constpool = (jvm_constant*) malloc(sizeof(jvm_constant)*file.constpool_c);
  
     idx = parse_cpool(data, idx, file.constpool, file.constpool_c, 1);
 
+    // ACCESS FLAG PARSE
     file.access_flags = jvm_u16(data[idx++], data[idx++]);
     printf("access_flags: %d\n", file.access_flags);
+
+    // CLASS RELATIONS
 
     file.this_class = jvm_u16(data[idx++], data[idx++])-1;
     printf("this_class: %s\n", file.constpool[file.constpool[file.this_class].jconst._class->name_index].jconst._utf8->bytes);
@@ -55,6 +67,8 @@ int main(int argc, char** argv){
     file.interface_c = jvm_u16(data[idx++], data[idx++]);
     printf("interfaces[%d]=\n", file.interface_c);
 
+    // INTERFACE PARSING
+
     u16 interfaces[file.interface_c];
 
     for (int i = 0; i < file.interface_c; i++){
@@ -62,6 +76,8 @@ int main(int argc, char** argv){
         printf("interface[%d]\n", interfaces[i]);
     }
     file.interfaces = interfaces;
+
+    // FIELD PARSING
 
     file.field_c = jvm_u16(data[idx++], data[idx++]);
     printf("fields[%d]=\n", file.field_c);
@@ -78,6 +94,8 @@ int main(int argc, char** argv){
     }
 
     file.fields = fields;
+
+    // FREE DATA
 
     free(data);
     for (int i = 0; i < file.field_c; i++){

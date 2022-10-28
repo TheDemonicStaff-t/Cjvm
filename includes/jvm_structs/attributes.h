@@ -80,7 +80,6 @@ typedef struct _jvm_attribute {
     attribute attr;
     u32 attribute_length;
     u16 attribute_name_index;
-    u8 attribute_type;
 } jvm_attribute;
 
 void parse_attr(u8* data, i32* idx, jvm_attribute* attrs, i32 attr_c, jvm_constant* consts);
