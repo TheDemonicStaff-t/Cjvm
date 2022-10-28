@@ -16,7 +16,7 @@ typedef enum _const_tag{ // 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 18
     CONSTANT_NameAndType = 12,          //
     CONSTANT_MethodHandle = 15,         //
     CONSTANT_InvokeDynamic = 18,        //
-    CONSTANT_InterfaceMethodref = 11,
+    CONSTANT_InterfaceMethodref = 11,   //
 } const_tag;
 
 typedef struct _constant_class {u16 name_index;} constant_class;

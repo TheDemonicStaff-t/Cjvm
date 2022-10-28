@@ -3,31 +3,31 @@
 #include "../nums.h"
 #include "miscellaneous.h"
 #include "stack_map_frames.h"
+#include "constants.h"
 
 typedef enum _attr_type {
-    attrConstantValue,
     attrCode,
-    attrStackMapTable,
-    attrExceptions,
-    attrInnerClasses,
-    attrEnclosingMethod,
     attrSynthetic,
     attrSignature,
+    attrExceptions,
     attrSourcefile,
-    attrSourceDebugExtension,
-    attrLineNumberTable,
-    attrLocalVariableTable,
-    attrLocalVariableTypeTable,
     attrDeprecated,
+    attrInnerClasses,
+    attrConstantValue,
+    attrStackMapTable,
+    attrEnclosingMethod,
+    attrLineNumberTable,
+    attrBootstrapMethods,
+    attrAnnotationDefault,
+    attrLocalVariableTable,
+    attrSourceDebugExtension,
+    attrLocalVariableTypeTable,
     attrRuntimeVisibleAnnotations,
     attrRuntimeInvisibleAnnotations,
     attrRuntimeVisibleParameterAnnotations,
     attrRuntimeInvisibleParameterAnnotations,
-    attrAnnotationDefault,
-    attrBootstrapMethods
 } attr_type;
 
-typedef struct _ConstantValue {u16 constantvalue_index;} ConstantValue;
 typedef struct _Code {
     u16 max_stack;
     u16 max_locals;
@@ -36,7 +36,7 @@ typedef struct _Code {
     u16 exception_c;
     exception* exceptions;
     u16 attribute_c;
-    jvm_attribute* attribute;
+    jvm_attribute* attributes;
 } Code;
 typedef struct _StackMapTable {u16 number_of_entries; jvm_stack_map_frame* entries;} StackMapTable;
 typedef struct _Exceptions {u16 number_fo_exceptions; u16* exception_index_table;} Exceptions;
@@ -54,7 +54,7 @@ typedef struct _AnnotationDefault {element_value default_value;} AnnotationDefau
 typedef struct _BootstrapMethods {u16 num_bootstrap_methods;} BootstrapMethods;
 
 typedef union _attribute {
-    ConstantValue* const_val_attr;
+    u16 const_val_index;
     Code* code_attr;
     StackMapTable* stack_map_table_attr;
     Exceptions* exception_attr;
@@ -82,3 +82,6 @@ typedef struct _jvm_attribute {
     u16 attribute_name_index;
     u8 attribute_type;
 } jvm_attribute;
+
+void parse_attr(u8* data, i32* idx, jvm_attribute* attrs, i32 attr_c, jvm_constant* consts);
+void free_attr(jvm_attribute* attrs, i32 attr_c, jvm_constant* consts);

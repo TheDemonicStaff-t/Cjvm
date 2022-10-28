@@ -71,9 +71,18 @@ int main(int argc, char** argv){
     for (int i = 0; i < file.field_c; i++){
         fields[i].access_flags = jvm_u16(data[idx++], data[idx++]);
         fields[i].name_index = jvm_u16(data[idx++], data[idx++]);
+        fields[i].descriptor_index = jvm_u16(data[idx++], data[idx++]);
+        fields[i].attribute_c = jvm_u16(data[idx++], data[idx++]);
+        fields[i].attributes = (jvm_attribute*) malloc(sizeof(jvm_attribute)*fields[i].attribute_c);
+        parse_attr(data, &idx, fields[i].attributes, fields[i].attribute_c, file.constpool);
     }
 
+    file.fields = fields;
+
     free(data);
+    for (int i = 0; i < file.field_c; i++){
+        free_attr(file.fields->attributes, file.fields->attribute_c, file.constpool);
+    }
     free_cpool(file.constpool, file.constpool_c);
 
     return 0;
